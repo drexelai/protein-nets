@@ -12,3 +12,6 @@
   - Measuring Protein Structure using Machine Learning:
   - https://www.mabc2020.com/post/measuring-protein-structure-deviation-using-machine-learning
 
+## Resources
+- https://papers.nips.cc/paper/2018/file/afa299a4d1d8c52e75dd8a24c3ce534f-Paper.pdf
+- 
