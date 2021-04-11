@@ -6,10 +6,10 @@
 - Data set is through Protein Data Bank through API calls (https://www.wwpdb.org/)
 
 ## Tasks
-[] - Define protein structures of interest, search space, and data base focus
-[] - Build database using list of four-letter protein structure IDs
-[] - Download proteins from PDB and encode protein structures into grid structure
-[] - Determine feature set based on encoding and decide if any more features should be included
+[] - Define protein structures of interest, search space, and data base focus \
+[] - Build database using list of four-letter protein structure IDs \
+[] - Download proteins from PDB and encode protein structures into grid structure \
+[] - Determine feature set based on encoding and decide if any more features should be included \
 
 ## Agenda
  
