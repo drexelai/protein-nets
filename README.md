@@ -1,7 +1,7 @@
 # protein-nets
 
 ## Project objective
-- Create a generalized advesarial network to generate and discriminate between generated proteins based on whether they cut DNA or whether they contain given structural motifs.
+- Create a generalized advesarial network (GAN) to generate and discriminate between generated proteins based on whether they cut DNA or whether they contain given structural motifs.
 - Explore protein encoding (https://github.com/ethanmoyer/ptnstrerrpredict/blob/master/ptn.py)
 - Data set is through Protein Data Bank through API calls (https://www.wwpdb.org/)
 
@@ -10,6 +10,10 @@
 [] - Build database using list of four-letter protein structure IDs \
 [] - Download proteins from PDB and encode protein structures into grid structure \
 [] - Determine feature set based on encoding and decide if any more features should be included \
+[] - Train GAN/DCGAN on encoded protein structures \
+[] - Perform experiemnts/gather results to determine how well the model performed \
+[] - Explore the ~explainability~ of the model \ 
+[] - Generate figures for paper and sample test cases to illistrate how the model performs on an individual protein structure
 
 ## Agenda
  
