@@ -12,8 +12,8 @@
 [] - Determine feature set based on encoding and decide if any more features should be included \
 [] - Train GAN/DCGAN on encoded protein structures \
 [] - Perform experiemnts/gather results to determine how well the model performed \
-[] - Explore the ~explainability~ of the model \ 
-[] - Generate figures for paper and sample test cases to illistrate how the model performs on an individual protein structure \
+[] - Explore the explainability of the model \
+[] - Generate figures for paper and sample test cases to illistrate how the model performs on an individual protein structure 
 
 ## Agenda
  
