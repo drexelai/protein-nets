@@ -15,7 +15,7 @@
 [] - Explore the explainability of the model () \
 [] - Generate figures for paper and sample test cases to illistrate how the model performs on an individual protein structure ()
 
-## Papper section 
+## Paper section 
 - Abstract
 - Introduction
 - Related work
