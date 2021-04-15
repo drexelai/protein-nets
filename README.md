@@ -5,7 +5,7 @@
 - Explore protein encoding (https://github.com/ethanmoyer/ptnstrerrpredict/blob/master/ptn.py)
 - Data set is through Protein Data Bank through API calls (https://www.wwpdb.org/)
 
-### Paper 1: Functional Protein Structure Annotation using a Deep Colvolution Generative Adversarial Network
+## Paper 1: Functional Protein Structure Annotation using a Deep Colvolution Generative Adversarial Network
 - Create a deep convolution generalized advesarial network (DCGAN) to generate and discriminate between functional and non-functional protein structures.
 
 Conference: https://www.bhi-bsn-2021.org/
