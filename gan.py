@@ -1,6 +1,7 @@
 from tensorflow.keras import layers
 import tensorflow as tf
 from tensorflow import keras
+from loadptn import x_min, y_min, z_min, x_max, y_max, z_max, atom_pos, atom_type
 physical_devices = tf.config.list_physical_devices('GPU')
 try:
   tf.config.experimental.set_memory_growth(physical_devices[0], True)
@@ -10,7 +11,7 @@ except:
 # Create the discriminator
 discriminator = keras.Sequential(
     [
-        keras.Input(shape=(59, 46, 63, 74)),
+        keras.Input(shape=(z_max-z_min, y_max-y_min, x_max-x_min, 1 + len(atom_type) + len(atom_pos))),
         layers.Conv3D(64, (3, 3, 3), strides=(2, 2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
         layers.Conv3D(128, (3, 3), strides=(2, 2, 2), padding="same"),
@@ -26,7 +27,6 @@ latent_dim = 128
 generator = keras.Sequential(
     [
         keras.Input(shape=(latent_dim,)),
-        # We want to generate 128 coefficients to reshape into a 7x7x128 map
         layers.Dense(7 * 7 * 128),
         layers.LeakyReLU(alpha=0.2),
         layers.Reshape((7, 7, 128)),
