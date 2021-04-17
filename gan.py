@@ -10,10 +10,10 @@ except:
 # Create the discriminator
 discriminator = keras.Sequential(
     [
-        keras.Input(shape=(28, 28, 1)),
-        layers.Conv2D(64, (3, 3), strides=(2, 2), padding="same"),
+        keras.Input(shape=(59, 46, 63, 74)),
+        layers.Conv3D(64, (3, 3, 3), strides=(2, 2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
-        layers.Conv2D(128, (3, 3), strides=(2, 2), padding="same"),
+        layers.Conv3D(128, (3, 3), strides=(2, 2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
         layers.GlobalMaxPooling2D(),
         layers.Dense(1),
@@ -30,14 +30,16 @@ generator = keras.Sequential(
         layers.Dense(7 * 7 * 128),
         layers.LeakyReLU(alpha=0.2),
         layers.Reshape((7, 7, 128)),
-        layers.Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same"),
+        layers.Conv3DTranspose(128, (4, 4), strides=(2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
-        layers.Conv2DTranspose(128, (4, 4), strides=(2, 2), padding="same"),
+        layers.Conv3DTranspose(128, (4, 4), strides=(2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
-        layers.Conv2D(1, (7, 7), padding="same", activation="sigmoid"),
+        layers.Conv3D(1, (7, 7), padding="same", activation="sigmoid"),
     ],
     name="generator",
 )
+
+
 
 class GAN(keras.Model):
     def __init__(self, discriminator, generator, latent_dim):

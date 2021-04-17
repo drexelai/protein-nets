@@ -10,6 +10,8 @@ from grid_point import grid_point
 import math
 import random
 
+import pickle
+
 # Given a set of files storing entry objects and their directory location, return their feature dimensions such as the positional atom types and the bounds for the matrix.
 def load_feature_dimensions(files, fdir = 'ptndata_10H/'):
 	x_min, y_min, z_min, x_max, y_max, z_max = CUBIC_LENGTH_CONSTRAINT, CUBIC_LENGTH_CONSTRAINT, CUBIC_LENGTH_CONSTRAINT, 0, 0, 0
@@ -159,6 +161,29 @@ def find_bounds(mat):
 	return x_min, y_min, z_min, x_max, y_max, z_max
 
 
+def sample_gen(files, feature_set, atom_type, atom_type_encoder, atom_pos, atom_pos_encoder, energy_scores, x_min, y_min, z_min, x_max, y_max, z_max, fdir='ptndata_10H/'):
+	for q, file in enumerate(files):
+		entry = pickle.load(open(fdir + file, 'rb'))
+		a = grid2logical(entry.mat)
+		b = grid2atomtype(entry.mat, atom_type, atom_type_encoder)
+		c = grid2atom(entry.mat, atom_pos, atom_pos_encoder)
+		dm_output = entry.dm
+		# rosetta_score, mse_score
+
+		y = dm_output[0].tolist()
+		y = np.reshape(y, (1, len(y[0]), len(y[0])))
+		y = y.astype(float)
+		#y = energy_scores.loc['ptndata_10H/' + file]['mse_score']
+		#y = np.array(y)
+		#y = y.reshape(-1,1)	
+		for i in range(len(feature_set[0])):
+			for j in range(len(feature_set[0][0])):
+				for k in range(len(feature_set[0][0][0])):
+					feature_set[0][i][j][k] = [a[x_min + i][y_min + j][z_min + k]] + b[x_min + i][y_min + j][z_min + k].tolist() + c[x_min + i][y_min + j][z_min + k].tolist()
+
+		yield (feature_set, y)
+
+
 # Given new bounds and old bounds, return the proper updated bounds.
 def update_bounds(new_x_min, new_y_min, new_z_min, new_x_max, new_y_max, new_z_max, x_min, y_min, z_min, x_max, y_max, z_max):
 	if new_x_min < x_min:
@@ -182,9 +207,16 @@ def update_bounds(new_x_min, new_y_min, new_z_min, new_x_max, new_y_max, new_z_m
 	return x_min, y_min, z_min, x_max, y_max, z_max
 
 if __name__ == "__main__":
+
+	n = 10
+
 	fdir='/Users/ethanmoyer/Projects/data/ptn/20210414_DAI_ptndata_11H/'
 
 	files = getfileswithname(fdir, 'obj')
+
+	files.sort()
+
+	files = files[:n]
 
 	atom_type = ['C', 'N', 'O', 'S', 'None']
 	atom_type_data = pd.Series(atom_type)
@@ -192,9 +224,17 @@ if __name__ == "__main__":
 
 
 	# Skip if dimensions are already foudn for given data set
-	atom_pos, x_min, y_min, z_min, x_max, y_max, z_max = load_feature_dimensions(files, fdir)
+	# atom_pos, x_min, y_min, z_min, x_max, y_max, z_max = load_feature_dimensions(files, fdir)
 
 	print(x_min, y_min, z_min, x_max, y_max, z_max)
+	x_min = 1
+	y_min = 10
+	z_min = 4
+	x_max = 64
+	y_max = 56
+	z_max = 63
+	atom_pos = ['O1', 'C9', 'O3', 'CZ2', 'CG2', 'CG', 'NE1', 'C1', 'C2', 'N3', 'CZ', 'OE2', 'SE', 'OE1', 'ND1', 'NH2', 'CE', 'C', 'OE21', 'OD2', 'OG', 'CH2', 'OXT', 'C5', 'ND2', 'C13', 'OE12', 'SD', 'C4', 'O', 'C6', 'C7', 'CE3', 'CH1', 'CA', 'C11', 'CB', 'CE1', 'NZ', 'C3', 'C12', 'OE11', 'NE', 'NE2', 'OG1', 'OH', 'N2', 'OT1', 'N1', 'O2', 'C14', 'C8', 'CD1', 'CG1', 'OD1', 'N', 'C10', 'CD2', 'CZ3', 'NH1', 'S', 'OT2', 'OE22', 'CD', 'SG', 'CE2', 'O4', 'None']
+
 
 	# Format the position specific atom list so it can be used as one-hot encoding in the network
 	atom_pos_data = pd.Series(atom_pos)
@@ -204,5 +244,7 @@ if __name__ == "__main__":
 	feature_set = np.array([[[[ [0] * (1 + len(atom_type) + len(atom_pos)) for i in range(x_min, x_max)] for j in range(y_min, y_max)] for k in range(z_min, z_max)] for q in range(1)])
 
 	feature_set_ = np.array([[[[ [0] * (1 + len(atom_type) + len(atom_pos)) for i in range(x_min, x_max)] for j in range(y_min, y_max)] for k in range(z_min, z_max)] for q in range(validation_samples)])
+
+
 
 
