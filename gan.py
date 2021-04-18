@@ -19,7 +19,10 @@ discriminator = keras.Sequential(
         layers.LeakyReLU(alpha=0.2),
         layers.Conv3D(128, (3, 3, 3), strides=(2, 2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
+<<<<<<< HEAD
+=======
         layers.GlobalMaxPooling3D(),
+>>>>>>> main
         layers.Dense(1),
     ],
     name="discriminator",
