@@ -6,12 +6,8 @@ from data import get_data
 
 def main(batch_size, file_dir):
     # Prepare the dataset. We use both the training & test MNIST digits.
-    (x_train, _), (x_test, _) = get_data(file_dir)
-    all_digits = np.concatenate([x_train, x_test])
-    all_digits = all_digits.astype("float32") / 255.0
-    all_digits = np.reshape(all_digits, (-1, 28, 28, 1))
-    dataset = tf.data.Dataset.from_tensor_slices(all_digits)
-    dataset = dataset.shuffle(buffer_size=1024).batch(batch_size)
+    x = get_data(file_dir)
+    
     gan = GAN(discriminator=discriminator, generator=generator, latent_dim=latent_dim)
     gan.compile(
         d_optimizer=keras.optimizers.Adam(learning_rate=0.0003),
@@ -20,4 +16,6 @@ def main(batch_size, file_dir):
     )
     # To limit the execution time, we only train on 100 batches. You can train on
     # the entire dataset. You will need about 20 epochs to get nice results.
-    gan.fit(dataset.take(100), epochs=1)
+    gan.fit(x, epochs=20)
+if __name__ == '__main__':
+    main(10, 'ptn11H_10')
