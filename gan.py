@@ -7,6 +7,8 @@ try:
   tf.config.experimental.set_memory_growth(physical_devices[0], True)
 except:
   pass
+from sklearn.metrics import classification_report, confusion_matrix
+
 print('desired shape')
 print((z_max-z_min, y_max-y_min, x_max-x_min, 1 + len(atom_type) + len(atom_pos)))
 # Create the discriminator
@@ -73,12 +75,12 @@ class GAN(keras.Model):
             [tf.ones((batch_size, 1)), tf.zeros((batch_size, 1))], axis=0
         )
         # Add random noise to the labels - important trick!
-        labels += 0.05 * tf.random.uniform(tf.shape(labels))
+        # labels += 0.05 * tf.random.uniform(tf.shape(labels))
 
         # Train the discriminator
         with tf.GradientTape() as tape:
-            predictions = self.discriminator(combined_images)
-            d_loss = self.loss_fn(labels, predictions)
+            predictions_d = self.discriminator(combined_images)
+            d_loss = self.loss_fn(labels, predictions_d)
         grads = tape.gradient(d_loss, self.discriminator.trainable_weights)
         self.d_optimizer.apply_gradients(
             zip(grads, self.discriminator.trainable_weights)
@@ -97,5 +99,6 @@ class GAN(keras.Model):
             g_loss = self.loss_fn(misleading_labels, predictions)
         grads = tape.gradient(g_loss, self.generator.trainable_weights)
         self.g_optimizer.apply_gradients(zip(grads, self.generator.trainable_weights))
+
         return {"d_loss": d_loss, "g_loss": g_loss}
 
