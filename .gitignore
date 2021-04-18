@@ -1,4 +1,8 @@
 # Byte-compiled / optimized / DLL files
+ptn11H_10/
+ptn11H_1000/
+ptn11H_1000.zip
+ptn11H_10.npy
 __pycache__/
 *.py[cod]
 *$py.class
