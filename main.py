@@ -5,12 +5,13 @@ import numpy as np
 from data import get_data
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+from loadptn import x_min, y_min, z_min, x_max, y_max, z_max, atom_pos, atom_type
 
-def main(batch_size, file_dir):
+def main(epochs, batch_size, file_dir, train=True):
     # Prepare the dataset. We use both the training & test MNIST digits.
     x = get_data(file_dir)
     
-    gan = GAN(discriminator=discriminator, generator=generator, latent_dim=latent_dim)
+    gan = GAN(discriminator=discriminator, generator=generator, latent_dim=latent_dim, batch_size=batch_size)
     gan.compile(
         d_optimizer=keras.optimizers.Adam(learning_rate=0.0003),
         g_optimizer=keras.optimizers.Adam(learning_rate=0.0003),
@@ -18,23 +19,23 @@ def main(batch_size, file_dir):
     )
     # To limit the execution time, we only train on 100 batches. You can train on
     # the entire dataset. You will need about 20 epochs to get nice results.
-    print(generator.summary())
-    print(discriminator.summary())
-    history = gan.fit(x, batch_size=batch_size, epochs=20)
-    g_loss, d_loss = history.history['g_loss'], history.history['d_loss']
-    plt.plot(g_loss)
-    plt.plot(d_loss)
-    plt.xticks(np.arange(0, 20, step=1))  # Set label locations.
-    plt.xlabel('epochs')
-    plt.ylabel('loss')
-    plt.title('Protein Structure Generation With DCGAN')
-    # print(xticks(np.arange(0, 20, step=1)))
-    # pred = np.stack(history.history['pred'], axis=0)
-    # labels = np.stack(history.history['label'], axis=0)
-    # accuracies = get_accuracies(pred, labels)
-    # plt.plot(accuracies)
-    plt.legend(['Generator loss', 'Discriminator loss'], loc='upper right')
-    plt.show()
+    if train:
+        history = gan.fit(x, batch_size=batch_size, epochs=epochs)
+        gan.discriminator.save('gan_disciminator')
+        gan.generator.save('gan_generator')
+
+        g_loss, d_loss = history.history['g_loss'], history.history['d_loss']
+        plt.plot(g_loss)
+        plt.plot(d_loss)
+        plt.xticks(np.arange(0, epochs, step=1))  # Set label locations.
+        plt.xlabel('epochs')
+        plt.ylabel('loss')
+        plt.title('Protein Structure Generation With DCGAN')
+        plt.legend(['Generator loss', 'Discriminator loss'], loc='upper right')
+        plt.show()
+    else:
+        gan.discriminator = keras.models.load_model('gan_disciminator')
+        gan.generator = keras.models.load_model('gan_generator')
 def get_accuracies(pred, labels, threshold=.5):
     pred_output = pred.copy()
     labels_output = labels.copy()
@@ -74,4 +75,6 @@ def plot_training_loss(history):
 
 
 if __name__ == '__main__':
-    main(10, 'ptn11H_10')
+    epochs = 50
+    batch_size = 16
+    main(epochs, batch_size, 'ptn11H_1000')

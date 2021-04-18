@@ -1,8 +1,11 @@
 # Byte-compiled / optimized / DLL files
+gan_generator/
+gan_discriminator/
 ptn11H_10/
 ptn11H_1000/
 ptn11H_1000.zip
 ptn11H_10.npy
+ptn11H_1000.npy
 __pycache__/
 *.py[cod]
 *$py.class

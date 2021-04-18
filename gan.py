@@ -9,8 +9,6 @@ except:
   pass
 from sklearn.metrics import classification_report, confusion_matrix
 
-print('desired shape')
-print((z_max-z_min, y_max-y_min, x_max-x_min, 1 + len(atom_type) + len(atom_pos)))
 # Create the discriminator
 discriminator = keras.Sequential(
     [
@@ -45,11 +43,12 @@ generator = keras.Sequential(
 
 
 class GAN(keras.Model):
-    def __init__(self, discriminator, generator, latent_dim):
+    def __init__(self, discriminator, generator, latent_dim, batch_size):
         super(GAN, self).__init__()
         self.discriminator = discriminator
         self.generator = generator
         self.latent_dim = latent_dim
+        self.batch_size = batch_size
 
     def compile(self, d_optimizer, g_optimizer, loss_fn):
         super(GAN, self).compile()
@@ -101,4 +100,7 @@ class GAN(keras.Model):
         self.g_optimizer.apply_gradients(zip(grads, self.generator.trainable_weights))
 
         return {"d_loss": d_loss, "g_loss": g_loss}
+    def call(inputs):
+        random_latent_vectors = tf.random.normal(shape=(self.batch_size, self.latent_dim))
+        return self.generator(random_latent_vectors)
 

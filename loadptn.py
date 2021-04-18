@@ -191,10 +191,10 @@ def update_bounds(new_x_min, new_y_min, new_z_min, new_x_max, new_y_max, new_z_m
 
 	return x_min, y_min, z_min, x_max, y_max, z_max
 
-def train_data_loader(files, feature_set, fdir='ptndata_10H/'):
+def train_data_loader(files, feature_set, fdir='ptndata_10H'):
 	global atom_type, atom_type_encoder, atom_pos, atom_pos_encoder, x_min, y_min, z_min, x_max, y_max, z_max
 	for q, file in tqdm(enumerate(files)):
-		entry = pickle.load(open(fdir + file, 'rb'))
+		entry = pickle.load(open(fdir +'/' + file, 'rb'))
 		a = grid2logical(entry.mat)
 		b = grid2atomtype(entry.mat, atom_type, atom_type_encoder)
 		c = grid2atom(entry.mat, atom_pos, atom_pos_encoder)
@@ -207,22 +207,20 @@ def train_data_loader(files, feature_set, fdir='ptndata_10H/'):
 					feature_set[q][i][j][k] = [a[x_min + i][y_min + j][z_min + k]] + b[x_min + i][y_min + j][z_min + k].tolist() + c[x_min + i][y_min + j][z_min + k].tolist()
 
 if __name__ == "__main__":
-	fdir='ptn11H_1000/'
-	output = load_acceptable_dimensions(fdir)
-	print(len(output))
-	print(output)
+	fdir='ptn11H_1000'
+	files = acceptable_protein_names
 	# files = os.listdir(fdir)
 	# files.sort()
 
 	# print(load_feature_dimensions(files, fdir))
 	# # Initialize the feature set
 	# feature_set = None
-	# if os.path.isfile(dataset_file+'.npy'):
-	# 	feature_set = np.load(dataset_file+'.npy')
-	# else:
-	# 	feature_set = np.zeros(shape=(len(files), z_max-z_min, y_max-y_min, x_max-x_min, 1 + len(atom_type) + len(atom_pos)))
-	# 	train_data_loader(files, feature_set, fdir=fdir)
-	# 	np.save(dataset_file, feature_set)
+	if os.path.isfile(fdir+'.npy'):
+		feature_set = np.load(fdir+'.npy')
+	else:
+		feature_set = np.zeros(shape=(len(files), z_max-z_min, y_max-y_min, x_max-x_min, 1 + len(atom_type) + len(atom_pos)))
+		train_data_loader(files, feature_set, fdir=fdir)
+		np.save(fdir, feature_set)
 	# feature_set_ = np.array([[[[ [0] * (1 + len(atom_type) + len(atom_pos)) for i in range(x_min, x_max)] for j in range(y_min, y_max)] for k in range(z_min, z_max)] for q in range(validation_samples)])
 
 
