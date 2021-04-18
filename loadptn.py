@@ -15,13 +15,13 @@ import os
 from tqdm import tqdm
 
 CUBIC_LENGTH_CONSTRAINT = 70
-x_min, y_min, z_min, x_max, y_max, z_max = 1, 10, 4, 64, 56, 63
+x_min, y_min, z_min, x_max, y_max, z_max = 17, 22, 15, 49, 48, 52
 
 atom_type = ['C', 'N', 'O', 'S', 'None']
 atom_type_data = pd.Series(atom_type)
 atom_type_encoder = np.array(pd.get_dummies(atom_type_data))
 
-atom_pos = ['O1', 'C9', 'O3', 'CZ2', 'CG2', 'CG', 'NE1', 'C1', 'C2', 'N3', 'CZ', 'OE2', 'SE', 'OE1', 'ND1', 'NH2', 'CE', 'C', 'OE21', 'OD2', 'OG', 'CH2', 'OXT', 'C5', 'ND2', 'C13', 'OE12', 'SD', 'C4', 'O', 'C6', 'C7', 'CE3', 'CH1', 'CA', 'C11', 'CB', 'CE1', 'NZ', 'C3', 'C12', 'OE11', 'NE', 'NE2', 'OG1', 'OH', 'N2', 'OT1', 'N1', 'O2', 'C14', 'C8', 'CD1', 'CG1', 'OD1', 'N', 'C10', 'CD2', 'CZ3', 'NH1', 'S', 'OT2', 'OE22', 'CD', 'SG', 'CE2', 'O4', 'None']
+atom_pos = ['CG', 'OG', 'OH', 'NH2', 'CE1', 'CD2', 'OG1', 'N', 'ND1', 'CD', 'SD', 'ND2', 'OD1', 'OE2', 'OE1', 'C', 'NE', 'OD2', 'SG', 'CB', 'CD1', 'CZ', 'NH1', 'CE2', 'CG1', 'NE2', 'NZ', 'CG2', 'CA', 'O', 'CE', 'None']
 atom_pos_data = pd.Series(atom_pos)
 atom_pos_encoder = np.array(pd.get_dummies(atom_pos_data))
 dataset_file = 'ptn11H_10'
@@ -191,9 +191,9 @@ def train_data_loader(files, feature_set, fdir='ptndata_10H/'):
 if __name__ == "__main__":
 	fdir='ptn11H_10/'
 	files = os.listdir(fdir)
-	files.sort()
+	# files.sort()
 
-	#print(load_feature_dimensions(files, fdir))
+	print(load_feature_dimensions(files, fdir))
 	# Initialize the feature set
 	feature_set = None
 	if os.path.isfile(dataset_file+'.npy'):
