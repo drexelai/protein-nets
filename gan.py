@@ -14,7 +14,7 @@ discriminator = keras.Sequential(
         keras.Input(shape=(z_max-z_min, y_max-y_min, x_max-x_min, 1 + len(atom_type) + len(atom_pos))),
         layers.Conv3D(64, (3, 3, 3), strides=(2, 2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
-        layers.Conv3D(128, (3, 3), strides=(2, 2, 2), padding="same"),
+        layers.Conv3D(128, (3, 3, 3), strides=(2, 2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
         layers.GlobalMaxPooling2D(),
         layers.Dense(1),
@@ -27,14 +27,14 @@ latent_dim = 128
 generator = keras.Sequential(
     [
         keras.Input(shape=(latent_dim,)),
-        layers.Dense(7 * 7 * 128),
+        layers.Dense(7 * 7 * 7 * 128),
         layers.LeakyReLU(alpha=0.2),
-        layers.Reshape((7, 7, 128)),
-        layers.Conv3DTranspose(128, (4, 4), strides=(2, 2), padding="same"),
+        layers.Reshape((7, 7, 7, 128)),
+        layers.Conv3DTranspose(128, (4, 4, 4), strides=(2, 2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
-        layers.Conv3DTranspose(128, (4, 4), strides=(2, 2), padding="same"),
+        layers.Conv3DTranspose(128, (4, 4, 4), strides=(2, 2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
-        layers.Conv3D(1, (7, 7), padding="same", activation="sigmoid"),
+        layers.Conv3D(1, (7, 7, 7), padding="same", activation="sigmoid"),
     ],
     name="generator",
 )
