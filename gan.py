@@ -8,7 +8,7 @@ try:
 except:
   pass
 from sklearn.metrics import classification_report, confusion_matrix
-
+print((z_max-z_min, y_max-y_min, x_max-x_min, 1 + len(atom_type) + len(atom_pos)))
 # Create the discriminator
 discriminator = keras.Sequential(
     [
@@ -28,12 +28,12 @@ latent_dim = 1 + len(atom_type) + len(atom_pos)
 generator = keras.Sequential(
     [
         keras.Input(shape=(latent_dim,)),
-        layers.Dense((z_max-z_min)* (y_max-y_min)* (x_max-x_min)* latent_dim),
+        layers.Dense(5*3*8* latent_dim),
         layers.LeakyReLU(alpha=0.2),
-        layers.Reshape((z_max-z_min, y_max-y_min, x_max-x_min, latent_dim)),
-        layers.Conv3DTranspose(latent_dim, (4, 4, 4), strides=(1, 1, 1), padding="same"),
+        layers.Reshape((5, 3, 8, latent_dim)),
+        layers.Conv3DTranspose(latent_dim, (4, 4, 4), strides=(2, 3, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
-        layers.Conv3DTranspose(latent_dim, (4, 4, 4), strides=(1, 1, 1), padding="same"),
+        layers.Conv3DTranspose(latent_dim, (4, 4, 4), strides=(4, 3, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
         layers.Conv3D(latent_dim, (7, 7, 7), padding="same", activation="sigmoid"),
     ],

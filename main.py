@@ -9,8 +9,9 @@ from loadptn import x_min, y_min, z_min, x_max, y_max, z_max, atom_pos, atom_typ
 
 def main(epochs, batch_size, file_dir, train=True):
     # Prepare the dataset. We use both the training & test MNIST digits.
-    x = get_data(file_dir)
-    
+    not_padded = get_data(file_dir)
+    # Change [37,26,32,38] to [40,27,32,38]
+    x = np.pad(not_padded, ((0, 0),(1, 2), (1, 0), (0, 0), (0, 0)), 'mean')
     gan = GAN(discriminator=discriminator, generator=generator, latent_dim=latent_dim, batch_size=batch_size)
     gan.compile(
         d_optimizer=keras.optimizers.Adam(learning_rate=0.0003),
