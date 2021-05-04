@@ -9,6 +9,8 @@ except:
   pass
 from sklearn.metrics import classification_report, confusion_matrix
 print((z_max-z_min, y_max-y_min, x_max-x_min, 1 + len(atom_type) + len(atom_pos)))
+#Make it have size 32x32x32x48
+
 # Create the discriminator
 discriminator = keras.Sequential(
     [
@@ -23,19 +25,19 @@ discriminator = keras.Sequential(
     name="discriminator",
 )
 
-# Create the generator
+# Create the generator 32 32 48
 latent_dim = 1 + len(atom_type) + len(atom_pos)
 generator = keras.Sequential(
     [
         keras.Input(shape=(latent_dim,)),
-        layers.Dense(5*3*8* latent_dim),
+        layers.Dense(12*8*8* latent_dim),
         layers.LeakyReLU(alpha=0.2),
-        layers.Reshape((5, 3, 8, latent_dim)),
-        layers.Conv3DTranspose(latent_dim, (4, 4, 4), strides=(2, 3, 2), padding="same"),
+        layers.Reshape((12, 8, 8, latent_dim)),
+        layers.Conv3DTranspose(latent_dim, (4, 4, 4), strides=(1, 1, 1), padding="same"),
         layers.LeakyReLU(alpha=0.2),
-        layers.Conv3DTranspose(latent_dim, (4, 4, 4), strides=(4, 3, 2), padding="same"),
+        layers.Conv3DTranspose(latent_dim, (5, 5, 5), strides=(2, 2, 2), padding="same"),
         layers.LeakyReLU(alpha=0.2),
-        layers.Conv3D(latent_dim, (7, 7, 7), padding="same", activation="sigmoid"),
+        layers.Conv3DTranspose(latent_dim, (5, 5, 5), padding="same", strides=(2, 2, 2), activation="sigmoid"),
     ],
     name="generator",
 )
@@ -74,7 +76,7 @@ class GAN(keras.Model):
             [tf.ones((batch_size, 1)), tf.zeros((batch_size, 1))], axis=0
         )
         # Add random noise to the labels - important trick!
-        # labels += 0.05 * tf.random.uniform(tf.shape(labels))
+        labels += 0.01 * tf.random.uniform(tf.shape(labels))
 
         # Train the discriminator
         with tf.GradientTape() as tape:

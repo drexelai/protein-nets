@@ -15,7 +15,7 @@ import os
 from tqdm import tqdm
 
 CUBIC_LENGTH_CONSTRAINT = 70
-x_min, y_min, z_min, x_max, y_max, z_max = 17, 22, 13, 49, 49, 53
+x_min, y_min, z_min, x_max, y_max, z_max = 17, 22, 13, 17+32, 22+32, 13+48
 
 atom_type = ['C', 'N', 'O', 'S', 'None']
 atom_type_data = pd.Series(atom_type)
