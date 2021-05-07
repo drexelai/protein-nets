@@ -6,6 +6,7 @@ ptn11H_1000/
 ptn11H_1000.zip
 ptn11H_10.npy
 ptn11H_1000.npy
+features.npy
 __pycache__/
 *.py[cod]
 *$py.class
